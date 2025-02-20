@@ -1,209 +1,75 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Расписание занятий</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f0f2f5;
-        }
+{% extends "base.html" %}
 
-        .navbar {
-            background-color: #1a73e8;
-            color: white;
-            padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .back-btn {
-            color: white;
-            text-decoration: none;
-            padding: 8px 15px;
-            background-color: rgba(255,255,255,0.1);
-            border-radius: 4px;
-            transition: background-color 0.3s;
-        }
-
-        .back-btn:hover {
-            background-color: rgba(255,255,255,0.2);
-        }
-
-        .group-selector {
-            background-color: white;
-            padding: 20px;
-            margin-bottom: 30px;
-            border-radius: 8px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            text-align: center;
-        }
-
-        .group-selector h3 {
-            margin-top: 0;
-            margin-bottom: 15px;
-            color: #333;
-        }
-
-        .filter-group select {
-            width: 300px;
-            padding: 10px;
-            font-size: 16px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-
-        .group-title {
-            text-align: center;
-            color: #1a73e8;
-            margin: 30px 0;
-            font-size: 24px;
-        }
-
-        .day-schedule {
-            margin-bottom: 40px;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            overflow: hidden;
-        }
-
-        .day-schedule h3 {
-            margin: 0;
-            padding: 15px 20px;
-            background-color: #1a73e8;
-            color: white;
-            font-size: 18px;
-        }
-
-        .schedule-table {
-            width: 100%;
-            border-collapse: collapse;
-            background-color: white;
-        }
-
-        .schedule-table th {
-            background-color: #f8f9fa;
-            color: #333;
-            font-weight: 500;
-            padding: 12px 15px;
-            text-align: left;
-            border-bottom: 2px solid #dee2e6;
-        }
-
-        .schedule-table td {
-            padding: 12px 15px;
-            border-bottom: 1px solid #dee2e6;
-        }
-
-        .no-classes {
-            text-align: center;
-            color: #6c757d;
-            font-style: italic;
-            padding: 20px !important;
-        }
-
-        .select-group-message {
-            text-align: center;
-            padding: 40px;
-            background-color: white;
-            border-radius: 8px;
-            color: #6c757d;
-            font-size: 18px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 10px;
-            }
-            
-            .group-selector select {
-                width: 100%;
-            }
-            
-            .schedule-table {
-                display: block;
-                overflow-x: auto;
-            }
-        }
-    </style>
-</head>
-<body>
-    <nav class="navbar">
-        <span>Расписание занятий</span>
-        <a href="{{ url_for('index') }}" class="back-btn">Назад</a>
-    </nav>
-
-    <div class="container">
-        <!-- Выбор группы -->
-        <div class="group-selector">
-            <h3>Выберите группу:</h3>
-            <form action="{{ url_for('student') }}" method="GET">
-                <div class="filter-group">
-                    <select id="filter_group" name="group" onchange="this.form.submit()">
-                        <option value="">Все группы</option>
-                        {% for group in groups %}
-                            <option value="{{ group }}" {% if request.args.get('group') == group %}selected{% endif %}>{{ group }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-            </form>
-        </div>
-
-        {% if selected_group %}
-            <h2 class="group-title">Расписание группы {{ selected_group }}</h2>
-            
-            {% for day in ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'] %}
-                <div class="day-schedule">
-                    <h3>{{ day }}</h3>
-                    <table class="schedule-table">
-                        <thead>
-                            <tr>
-                                <th>Время</th>
-                                <th>Предмет</th>
-                                <th>Преподаватель</th>
-                                <th>Аудитория</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% set found = false %}
-                            {% for schedule in schedules %}
-                                {% if schedule.day == day %}
-                                    {% set found = true %}
-                                    <tr>
-                                        <td>{{ schedule.time }}</td>
-                                        <td>{{ schedule.subject }}</td>
-                                        <td>{{ schedule.teacher }}</td>
-                                        <td>{{ schedule.room }}</td>
-                                    </tr>
-                                {% endif %}
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="fas fa-filter me-2"></i>Выберите группу
+                </h5>
+                <form method="GET" class="row g-3">
+                    <div class="col-auto flex-grow-1">
+                        <select name="group" class="form-select">
+                            <option value="">Все группы</option>
+                            {% for group in groups %}
+                            <option value="{{ group }}" {% if group == selected_group %}selected{% endif %}>
+                                {{ group }}
+                            </option>
                             {% endfor %}
-                            {% if not found %}
-                                <tr>
-                                    <td colspan="4" class="no-classes">Нет занятий</td>
-                                </tr>
-                            {% endif %}
-                        </tbody>
-                    </table>
-                </div>
-            {% endfor %}
-        {% else %}
-            <div class="select-group-message">
-                <p>Пожалуйста, выберите группу для просмотра расписания</p>
+                        </select>
+                    </div>
+                    <div class="col-auto">
+                        <button type="submit" class="btn btn-custom">
+                            <i class="fas fa-search me-2"></i>Показать
+                        </button>
+                    </div>
+                </form>
             </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title mb-4">
+            <i class="fas fa-calendar-alt me-2"></i>Расписание занятий
+            {% if selected_group %}
+            <span class="badge bg-primary ms-2">{{ selected_group }}</span>
+            {% endif %}
+        </h5>
+        
+        {% if schedules %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th><i class="fas fa-calendar-day me-2"></i>День</th>
+                        <th><i class="fas fa-clock me-2"></i>Время</th>
+                        <th><i class="fas fa-book me-2"></i>Предмет</th>
+                        <th><i class="fas fa-chalkboard-teacher me-2"></i>Преподаватель</th>
+                        <th><i class="fas fa-door-open me-2"></i>Аудитория</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for schedule in schedules %}
+                    <tr>
+                        <td>{{ schedule.day }}</td>
+                        <td>{{ schedule.time }}</td>
+                        <td>{{ schedule.subject }}</td>
+                        <td>{{ schedule.teacher }}</td>
+                        <td>{{ schedule.room }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="text-center text-muted py-5">
+            <i class="fas fa-calendar-times fa-3x mb-3"></i>
+            <p>Расписание не найдено</p>
+        </div>
         {% endif %}
     </div>
-</body>
-</html>
+</div>
+{% endblock %}
