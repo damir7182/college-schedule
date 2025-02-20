@@ -5,6 +5,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import os
 import logging
 from datetime import datetime
+from sqlalchemy import case
 
 # Настройка логирования
 logging.basicConfig(level=logging.DEBUG)
@@ -66,8 +67,17 @@ def student():
         schedules = []
         
         if selected_group:
+            day_order = case({
+                'Понедельник': 1,
+                'Вторник': 2,
+                'Среда': 3,
+                'Четверг': 4,
+                'Пятница': 5,
+                'Суббота': 6
+            }, value=Schedule.day)
+            
             schedules = Schedule.query.filter_by(group_name=selected_group)\
-                                    .order_by(Schedule.day, Schedule.time)\
+                                    .order_by(day_order, Schedule.time)\
                                     .all()
         
         return render_template('public_schedule.html',
@@ -89,16 +99,19 @@ def login():
         if user and user.check_password(request.form['password']):
             login_user(user)
             return redirect(url_for('schedule'))
-        flash('Неверное имя пользователя или пароль')
+        flash('Неверное имя пользователя или пароль', 'error')
     return render_template('login.html')
 
 @app.route('/schedule')
 @login_required
 def schedule():
+    if not current_user.is_admin:
+        flash('Доступ запрещен. Только для администраторов.', 'error')
+        return redirect(url_for('index'))
+    
     try:
         filter_day = request.args.get('day')
         filter_group = request.args.get('group')
-        filter_teacher = request.args.get('teacher')
 
         query = Schedule.query
 
@@ -106,23 +119,27 @@ def schedule():
             query = query.filter(Schedule.day == filter_day)
         if filter_group:
             query = query.filter(Schedule.group_name == filter_group)
-        if filter_teacher:
-            query = query.filter(Schedule.teacher == filter_teacher)
 
-        schedules = query.order_by(Schedule.day, Schedule.time).all()
+        day_order = case({
+            'Понедельник': 1,
+            'Вторник': 2,
+            'Среда': 3,
+            'Четверг': 4,
+            'Пятница': 5,
+            'Суббота': 6
+        }, value=Schedule.day)
+
+        schedules = query.order_by(day_order, Schedule.time).all()
         all_schedules = Schedule.query.all()
         groups = sorted(list(set(s.group_name for s in all_schedules)))
-        teachers = sorted(list(set(s.teacher for s in all_schedules)))
         days = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота']
 
         return render_template('schedule.html', 
                             schedules=schedules,
                             groups=groups,
-                            teachers=teachers,
                             days=days,
                             selected_day=filter_day,
-                            selected_group=filter_group,
-                            selected_teacher=filter_teacher)
+                            selected_group=filter_group)
     except Exception as e:
         logger.error(f"Error in schedule route: {str(e)}")
         flash('Произошла ошибка при загрузке расписания', 'error')
@@ -142,9 +159,14 @@ def add_schedule():
         return redirect(url_for('schedule'))
     
     try:
+        # Преобразование времени в формат ЧЧ:ММ
+        time_str = request.form['time']
+        if ':' not in time_str:
+            time_str = f"{time_str[:2]}:{time_str[2:]}"
+
         new_schedule = Schedule(
             day=request.form['day'],
-            time=request.form['time'],
+            time=time_str,
             subject=request.form['subject'],
             teacher=request.form['teacher'],
             room=request.form['room'],
