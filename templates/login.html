@@ -2,33 +2,26 @@
 
 {% block content %}
 <div class="row justify-content-center">
-    <div class="col-md-6 col-lg-4">
+    <div class="col-md-6">
         <div class="card">
-            <div class="card-body p-4">
-                <div class="text-center mb-4">
-                    <i class="fas fa-user-circle fa-3x text-primary"></i>
-                    <h3 class="card-title mt-3">Вход в систему</h3>
-                </div>
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-sign-in-alt me-2"></i>Вход в систему
+                </h5>
+            </div>
+            <div class="card-body">
                 <form method="POST">
                     <div class="mb-3">
-                        <label for="username" class="form-label">
-                            <i class="fas fa-user me-2"></i>Имя пользователя
-                        </label>
-                        <input type="text" class="form-control" id="username" name="username" 
-                               required autocomplete="username">
+                        <label for="username" class="form-label">Имя пользователя</label>
+                        <input type="text" class="form-control" id="username" name="username" required>
                     </div>
-                    <div class="mb-4">
-                        <label for="password" class="form-label">
-                            <i class="fas fa-lock me-2"></i>Пароль
-                        </label>
-                        <input type="password" class="form-control" id="password" name="password" 
-                               required autocomplete="current-password">
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Пароль</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
                     </div>
-                    <div class="d-grid">
-                        <button type="submit" class="btn btn-custom">
-                            <i class="fas fa-sign-in-alt me-2"></i>Войти
-                        </button>
-                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-sign-in-alt me-2"></i>Войти
+                    </button>
                 </form>
             </div>
         </div>
