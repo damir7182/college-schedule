@@ -1,131 +1,49 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Расписание занятий</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f0f2f5;
-        }
+{% extends "base.html" %}
 
-        .navbar {
-            background-color: #1a73e8;
-            color: white;
-            padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .welcome-screen {
-            max-width: 600px;
-            margin: 50px auto;
-            text-align: center;
-            padding: 40px 20px;
-            background-color: white;
-            border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .welcome-screen h1 {
-            color: #1a73e8;
-            margin-bottom: 20px;
-            font-size: 32px;
-        }
-
-        .welcome-screen p {
-            color: #5f6368;
-            margin-bottom: 30px;
-            font-size: 18px;
-        }
-
-        .choice-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .choice-btn {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 30px;
-            width: 200px;
-            text-decoration: none;
-            border-radius: 8px;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .choice-btn:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-
-        .student-btn {
-            background-color: #1a73e8;
-            color: white;
-        }
-
-        .admin-btn {
-            background-color: #34a853;
-            color: white;
-        }
-
-        .btn-icon {
-            font-size: 40px;
-            margin-bottom: 15px;
-        }
-
-        .btn-text {
-            font-size: 18px;
-            font-weight: 500;
-        }
-
-        @media (max-width: 480px) {
-            .welcome-screen {
-                margin: 20px;
-                padding: 30px 15px;
-            }
-
-            .choice-btn {
-                width: 100%;
-                margin-bottom: 15px;
-            }
-        }
-    </style>
-</head>
-<body>
-    <nav class="navbar">
-        <span>Расписание занятий</span>
-    </nav>
-
-    <div class="container">
-        <div class="welcome-screen">
-            <h1>Добро пожаловать!</h1>
-            <p>Выберите режим просмотра расписания:</p>
-            <div class="choice-buttons">
-                <a href="{{ url_for('student') }}" class="choice-btn student-btn">
-                    <span class="btn-icon">👨‍🎓</span>
-                    <span class="btn-text">Студент</span>
-                </a>
-                <a href="{{ url_for('admin') }}" class="choice-btn admin-btn">
-                    <span class="btn-icon">👨‍💼</span>
-                    <span class="btn-text">Администратор</span>
-                </a>
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 text-center">
+        <h1 class="display-4 mb-4">
+            <i class="fas fa-graduation-cap me-3"></i>
+            Система расписания занятий
+        </h1>
+        <p class="lead mb-5">Удобный просмотр и управление расписанием занятий</p>
+        
+        <div class="row justify-content-center g-4">
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-body p-4">
+                        <div class="text-center mb-3">
+                            <i class="fas fa-users fa-3x text-primary"></i>
+                        </div>
+                        <h5 class="card-title">Студентам</h5>
+                        <p class="card-text text-muted">
+                            Просмотр расписания занятий по группам и дням недели
+                        </p>
+                        <a href="{{ url_for('student') }}" class="btn btn-custom w-100">
+                            <i class="fas fa-calendar-alt me-2"></i>Открыть расписание
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-body p-4">
+                        <div class="text-center mb-3">
+                            <i class="fas fa-user-cog fa-3x text-primary"></i>
+                        </div>
+                        <h5 class="card-title">Администраторам</h5>
+                        <p class="card-text text-muted">
+                            Управление расписанием и настройка системы
+                        </p>
+                        <a href="{{ url_for('admin') }}" class="btn btn-custom w-100">
+                            <i class="fas fa-sign-in-alt me-2"></i>Войти в систему
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</body>
-</html>
+</div>
+{% endblock %}
