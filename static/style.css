@@ -1,204 +1,201 @@
-/* Основные стили */
+:root {
+    --primary-color: #3498db;
+    --secondary-color: #2c3e50;
+}
+
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f0f2f5;
-}
-
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
-/* Навигационная панель */
-.navbar {
-    background-color: #1a73e8;
-    color: white;
-    padding: 15px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-/* Стили для стартовой страницы */
-.welcome-screen {
-    max-width: 600px;
-    margin: 50px auto;
-    text-align: center;
-    padding: 40px 20px;
-    background-color: white;
-    border-radius: 12px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-}
-
-.welcome-screen h1 {
-    color: #1a73e8;
-    margin-bottom: 20px;
-    font-size: 32px;
-}
-
-.welcome-screen p {
-    color: #5f6368;
-    margin-bottom: 30px;
-    font-size: 18px;
-}
-
-.choice-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
-}
-
-.choice-btn {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 30px;
-    width: 200px;
-    text-decoration: none;
-    border-radius: 8px;
-    transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.choice-btn:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-}
-
-.student-btn {
-    background-color: #1a73e8;
-    color: white;
-}
-
-.admin-btn {
-    background-color: #34a853;
-    color: white;
-}
-
-.btn-icon {
-    font-size: 40px;
-    margin-bottom: 15px;
-}
-
-.btn-text {
-    font-size: 18px;
-    font-weight: 500;
-}
-
-/* Стили для формы фильтрации */
-.filter-form {
     background-color: #f8f9fa;
-    padding: 20px;
+}
+
+.navbar-custom {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    padding: 1rem 0;
+}
+
+.card {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
     margin-bottom: 20px;
-    border-radius: 8px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
-.filter-form h3 {
-    margin-top: 0;
-    margin-bottom: 15px;
-    color: #333;
+.card:hover {
+    transform: translateY(-5px);
 }
 
-.filter-group {
-    display: inline-block;
-    margin-right: 20px;
-    margin-bottom: 10px;
-}
-
-.filter-group label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-}
-
-.filter-group select {
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    min-width: 200px;
-}
-
-/* Кнопки навигации */
-.back-btn, .admin-btn, .reset-btn {
+.btn-custom {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    border: none;
     color: white;
-    text-decoration: none;
-    padding: 8px 15px;
-    background-color: rgba(255,255,255,0.1);
-    border-radius: 4px;
-    transition: background-color 0.3s;
-}
-
-.back-btn:hover, .admin-btn:hover, .reset-btn:hover {
-    background-color: rgba(255,255,255,0.2);
-}
-
-/* Адаптивность */
-@media (max-width: 480px) {
-    .welcome-screen {
-        margin: 20px;
-        padding: 30px 15px;
-    }
-
-    .choice-btn {
-        width: 100%;
-        margin-bottom: 15px;
-    }
-    
-    .container {
-        padding: 10px;
-    }
-    
-    .filter-group select {
-        width: 100%;
-    }
-}
-
-/* Таблица расписания */
-.schedule-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-    background-color: white;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    padding: 8px 20px;
     border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn-custom:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    color: white;
+}
+
+.table {
+    background: white;
+    border-radius: 15px;
     overflow: hidden;
 }
 
-.schedule-table th,
-.schedule-table td {
-    padding: 12px 15px;
-    text-align: left;
-    border-bottom: 1px solid #eee;
-}
-
-.schedule-table th {
-    background-color: #1a73e8;
+.table thead {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
     color: white;
-    font-weight: 500;
 }
 
-.schedule-table tr:hover {
-    background-color: #f8f9fa;
-}
-
-/* Сообщения */
-.no-classes {
-    text-align: center;
-    color: #6c757d;
-    font-style: italic;
-    padding: 20px !important;
-}
-
-.select-group-message {
-    text-align: center;
-    padding: 40px;
-    background-color: #f8f9fa;
+.form-control, .form-select {
     border-radius: 8px;
-    color: #6c757d;
-    font-size: 18px;
+    border: 1px solid #dee2e6;
+    padding: 10px;
+}
+
+.footer {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    padding: 1rem 0;
+    margin-top: auto;
+}
+
+.alert {
+    border-radius: 10px;
+    border: none;
+}
+
+/* Анимации */
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from { 
+        opacity: 0; 
+        transform: translateY(20px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
+}
+
+/* Дополнительные стили */
+.page-header {
+    margin-bottom: 2rem;
+}
+
+.icon-large {
+    font-size: 3rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.table-actions {
+    white-space: nowrap;
+}
+
+.badge {
+    padding: 0.5em 1em;
+    border-radius: 8px;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .card {
+        margin-bottom: 1rem;
+    }
+    
+    .table-responsive {
+        margin-bottom: 1rem;
+    }
+    
+    .btn-custom {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+}
+
+/* Улучшения для форм */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-label {
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+/* Стили для модальных окон */
+.modal-content {
+    border-radius: 15px;
+    border: none;
+}
+
+.modal-header {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    border-radius: 15px 15px 0 0;
+}
+
+/* Улучшения для навигации */
+.navbar-brand {
+    font-weight: 600;
+}
+
+.nav-link {
+    padding: 0.5rem 1rem;
+    transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+    transform: translateY(-2px);
+}
+
+/* Стили для сообщений */
+.alert {
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Стили для кнопок действий */
+.btn-action {
+    padding: 0.375rem 0.75rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn-action:hover {
+    transform: translateY(-2px);
+}
+
+/* Стили для заголовков */
+.section-title {
+    color: var(--secondary-color);
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+}
+
+/* Стили для карточек на главной странице */
+.feature-card {
+    text-align: center;
+    padding: 2rem;
+}
+
+.feature-card .icon {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+/* Стили для фильтров */
+.filter-section {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 15px;
+    margin-bottom: 2rem;
 }
