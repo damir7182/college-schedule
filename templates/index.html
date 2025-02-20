@@ -1,45 +1,47 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-8 text-center">
-        <h1 class="display-4 mb-4">
-            <i class="fas fa-graduation-cap me-3"></i>
-            Система расписания занятий
-        </h1>
-        <p class="lead mb-5">Удобный просмотр и управление расписанием занятий</p>
-        
-        <div class="row justify-content-center g-4">
-            <div class="col-md-6">
-                <div class="card h-100">
-                    <div class="card-body p-4">
-                        <div class="text-center mb-3">
-                            <i class="fas fa-users fa-3x text-primary"></i>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <h1 class="display-4 mb-4">
+                <i class="fas fa-graduation-cap me-3"></i>
+                Система расписания занятий
+            </h1>
+            <p class="lead mb-5">Удобный просмотр и управление расписанием занятий</p>
+            
+            <div class="row justify-content-center g-4">
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body p-4">
+                            <div class="text-center mb-3">
+                                <i class="fas fa-users fa-3x text-primary"></i>
+                            </div>
+                            <h5 class="card-title">Студентам</h5>
+                            <p class="card-text text-muted">
+                                Просмотр расписания занятий по группам и дням недели
+                            </p>
+                            <a href="{{ url_for('student') }}" class="btn btn-custom w-100">
+                                <i class="fas fa-calendar-alt me-2"></i>Открыть расписание
+                            </a>
                         </div>
-                        <h5 class="card-title">Студентам</h5>
-                        <p class="card-text text-muted">
-                            Просмотр расписания занятий по группам и дням недели
-                        </p>
-                        <a href="{{ url_for('student') }}" class="btn btn-custom w-100">
-                            <i class="fas fa-calendar-alt me-2"></i>Открыть расписание
-                        </a>
                     </div>
                 </div>
-            </div>
-            
-            <div class="col-md-6">
-                <div class="card h-100">
-                    <div class="card-body p-4">
-                        <div class="text-center mb-3">
-                            <i class="fas fa-user-cog fa-3x text-primary"></i>
+                
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body p-4">
+                            <div class="text-center mb-3">
+                                <i class="fas fa-user-cog fa-3x text-primary"></i>
+                            </div>
+                            <h5 class="card-title">Администраторам</h5>
+                            <p class="card-text text-muted">
+                                Управление расписанием и настройка системы
+                            </p>
+                            <a href="{{ url_for('login') }}" class="btn btn-custom w-100">
+                                <i class="fas fa-sign-in-alt me-2"></i>Войти в систему
+                            </a>
                         </div>
-                        <h5 class="card-title">Администраторам</h5>
-                        <p class="card-text text-muted">
-                            Управление расписанием и настройка системы
-                        </p>
-                        <a href="{{ url_for('admin') }}" class="btn btn-custom w-100">
-                            <i class="fas fa-sign-in-alt me-2"></i>Войти в систему
-                        </a>
                     </div>
                 </div>
             </div>
