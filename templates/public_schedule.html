@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Просмотр расписания</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Расписание занятий</h1>
+        <form method="GET" class="filter-form">
+            <select name="group" onchange="this.form.submit()">
+                <option value="">Выберите группу</option>
+                {% for group in groups %}
+                <option value="{{ group }}" {% if group == selected_group %}selected{% endif %}>{{ group }}</option>
+                {% endfor %}
+            </select>
+        </form>
+        
+        {% if schedules %}
+        <table>
+            <tr>
+                <th>День</th>
+                <th>Время</th>
+                <th>Предмет</th>
+                <th>Преподаватель</th>
+                <th>Кабинет</th>
+            </tr>
+            {% for schedule in schedules %}
+            <tr>
+                <td>{{ schedule.day }}</td>
+                <td>{{ schedule.time }}</td>
+                <td>{{ schedule.subject }}</td>
+                <td>{{ schedule.teacher }}</td>
+                <td>{{ schedule.room }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% endif %}
+        <a href="{{ url_for('index') }}" class="button">Назад</a>
+    </div>
+</body>
+</html>
