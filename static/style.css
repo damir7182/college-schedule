@@ -1,151 +1,88 @@
-:root {
-    --primary-color: #3498db;
-    --secondary-color: #2c3e50;
-}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Расписание колледжа</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+</head>
+<body class="d-flex flex-column min-vh-100">
+    <!-- Навигационная панель -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('index') }}">
+                <i class="fas fa-calendar-alt me-2"></i>Расписание колледжа
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('student') }}">
+                            <i class="fas fa-users me-1"></i>Студентам
+                        </a>
+                    </li>
+                    {% if current_user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('schedule') }}">
+                            <i class="fas fa-cog me-1"></i>Управление
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+                <ul class="navbar-nav">
+                    {% if current_user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('logout') }}">
+                            <i class="fas fa-sign-out-alt me-1"></i>Выйти
+                        </a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('login') }}">
+                            <i class="fas fa-sign-in-alt me-1"></i>Войти
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
 
-body {
-    background-color: #f8f9fa;
-}
+    <!-- Основной контент -->
+    <main class="container my-4 fade-in">
+        <!-- Сообщения Flash -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category if category != 'message' else 'info' }} alert-dismissible fade show" role="alert">
+                <i class="fas fa-info-circle me-2"></i>{{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+        
+        <!-- Блок контента -->
+        {% block content %}{% endblock %}
+    </main>
 
-.navbar-custom {
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-    padding: 1rem 0;
-}
+    <!-- Подвал -->
+    <footer class="footer mt-auto">
+        <div class="container text-center py-3">
+            <span>
+                <i class="far fa-copyright me-2"></i>2024 Расписание колледжа
+            </span>
+        </div>
+    </footer>
 
-.card {
-    border: none;
-    border-radius: 15px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease;
-    margin-bottom: 20px;
-}
-
-.card:hover {
-    transform: translateY(-5px);
-}
-
-.btn-custom {
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-    border: none;
-    color: white;
-    padding: 8px 20px;
-    border-radius: 8px;
-    transition: all 0.3s ease;
-}
-
-.btn-custom:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    color: white;
-}
-
-.table {
-    background: white;
-    border-radius: 15px;
-    overflow: hidden;
-}
-
-.table thead {
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-    color: white;
-}
-
-.form-control, .form-select {
-    border-radius: 8px;
-    border: 1px solid #dee2e6;
-    padding: 10px;
-}
-
-.footer {
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-    color: white;
-    padding: 1rem 0;
-    margin-top: auto;
-}
-
-.alert {
-    border-radius: 10px;
-    border: none;
-}
-
-.fade-in {
-    animation: fadeIn 0.5s ease-in;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.card-header {
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)) !important;
-    color: white;
-    padding: 1rem;
-    border-radius: 15px 15px 0 0 !important;
-}
-
-.table th {
-    font-weight: 600;
-    font-size: 0.9rem;
-}
-
-.table td {
-    font-size: 0.95rem;
-    vertical-align: middle;
-}
-
-.badge {
-    padding: 0.5em 1em;
-    border-radius: 8px;
-}
-
-.form-group {
-    margin-bottom: 1.5rem;
-}
-
-.form-label {
-    font-weight: 500;
-    margin-bottom: 0.5rem;
-}
-
-.modal-content {
-    border-radius: 15px;
-    border: none;
-}
-
-.navbar-brand {
-    font-weight: 600;
-}
-
-.nav-link {
-    padding: 0.5rem 1rem;
-    transition: all 0.3s ease;
-}
-
-.nav-link:hover {
-    transform: translateY(-2px);
-}
-
-.section-title {
-    color: var(--secondary-color);
-    margin-bottom: 1.5rem;
-    font-weight: 600;
-}
-
-.feature-card {
-    text-align: center;
-    padding: 2rem;
-}
-
-.feature-card .icon {
-    font-size: 2.5rem;
-    color: var(--primary-color);
-    margin-bottom: 1rem;
-}
-
-.filter-section {
-    background: white;
-    padding: 1.5rem;
-    border-radius: 15px;
-    margin-bottom: 2rem;
-}
+    <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
