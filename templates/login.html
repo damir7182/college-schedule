@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Вход - Расписание колледжа</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Вход для администратора</h1>
+        <form method="POST" class="login-form">
+            <input type="text" name="username" placeholder="Имя пользователя" required>
+            <input type="password" name="password" placeholder="Пароль" required>
+            <button type="submit" class="button">Войти</button>
+        </form>
+        <a href="{{ url_for('index') }}" class="button">Назад</a>
+    </div>
+</body>
+</html>
