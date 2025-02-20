@@ -9,7 +9,7 @@ from datetime import datetime
 app = Flask(__name__)
 
 # Конфигурация
-app.config['SECRET_KEY'] = 'your-secret-key-123'  # Измените на свой секретный ключ
+app.config['SECRET_KEY'] = 'your-secret-key-123'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///college_schedule.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -171,7 +171,6 @@ def static_files(filename):
 def init_db():
     with app.app_context():
         db.create_all()
-        # Создание администратора, если его нет
         if not User.query.filter_by(username='admin').first():
             admin = User(username='admin', is_admin=True)
             admin.set_password('admin')
