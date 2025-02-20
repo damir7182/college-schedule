@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 import os
 import logging
+from datetime import datetime
 
 # Настройка логирования
 logging.basicConfig(level=logging.DEBUG)
@@ -179,15 +180,64 @@ def delete_schedule(id):
     return redirect(url_for('schedule'))
 
 def init_db():
-    with app.app_context():
-        db.create_all()
-        if not User.query.filter_by(username='admin').first():
-            admin = User(username='admin', is_admin=True)
-            admin.set_password('admin')
-            db.session.add(admin)
-            db.session.commit()
-            print('Admin created successfully!')
+    try:
+        with app.app_context():
+            # Создаем все таблицы
+            db.create_all()
+            
+            # Создаем администратора, если его нет
+            if not User.query.filter_by(username='admin').first():
+                admin = User(username='admin', is_admin=True)
+                admin.set_password('admin')
+                db.session.add(admin)
+                
+                # Добавляем тестовое расписание
+                test_schedules = [
+                    Schedule(
+                        day='Понедельник',
+                        time='09:00',
+                        subject='Математика',
+                        teacher='Иванов И.И.',
+                        room='101',
+                        group_name='ИС-11'
+                    ),
+                    Schedule(
+                        day='Понедельник',
+                        time='10:30',
+                        subject='Физика',
+                        teacher='Петров П.П.',
+                        room='102',
+                        group_name='ИС-11'
+                    ),
+                    Schedule(
+                        day='Вторник',
+                        time='09:00',
+                        subject='Информатика',
+                        teacher='Сидоров С.С.',
+                        room='103',
+                        group_name='ИС-12'
+                    )
+                ]
+                
+                # Добавляем тестовые данные
+                for schedule in test_schedules:
+                    db.session.add(schedule)
+                
+                # Сохраняем изменения
+                db.session.commit()
+                print('База данных успешно инициализирована!')
+    except Exception as e:
+        print(f'Ошибка при инициализации базы данных: {str(e)}')
+        db.session.rollback()
+        raise
 
 if __name__ == '__main__':
-    init_db()
+    with app.app_context():
+        # Удаляем старую базу данных
+        if os.path.exists('college_schedule.db'):
+            os.remove('college_schedule.db')
+        
+        # Инициализируем новую базу данных
+        init_db()
+    
     app.run(debug=True)
