@@ -1,113 +1,63 @@
-/* Основные цвета */
-:root {
-    --primary-color: #2c3e50;
-    --secondary-color: #3498db;
-    --accent-color: #e74c3c;
-    --light-color: #ecf0f1;
-    --dark-color: #2c3e50;
-}
-
-/* Общие стили */
 body {
-    font-family: 'Roboto', sans-serif;
-    background-color: #f5f6fa;
+    background-color: #f8f9fa;
+    min-height: 100vh;
 }
 
-/* Навигационная панель */
-.navbar-custom {
-    background-color: var(--primary-color);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.navbar-custom .navbar-brand {
-    color: var(--light-color);
-    font-weight: 500;
-}
-
-.navbar-custom .nav-link {
-    color: var(--light-color) !important;
-    transition: color 0.3s ease;
-}
-
-.navbar-custom .nav-link:hover {
-    color: var(--secondary-color) !important;
-}
-
-/* Кнопки */
-.btn-custom {
-    background-color: var(--secondary-color);
-    color: white;
-    border: none;
-    transition: all 0.3s ease;
-}
-
-.btn-custom:hover {
-    background-color: #2980b9;
-    color: white;
-    transform: translateY(-1px);
-}
-
-/* Карточки */
 .card {
     border: none;
     border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    transition: transform 0.3s ease;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
 }
 
-.card:hover {
-    transform: translateY(-5px);
+.card-header {
+    border-radius: 10px 10px 0 0 !important;
 }
 
-/* Таблицы */
-.table {
+.table th {
+    background-color: #f8f9fa;
+}
+
+.day-schedule {
+    margin-bottom: 30px;
+}
+
+.day-header {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 10px 10px 0 0;
+    margin-bottom: 0;
+}
+
+.schedule-table {
     background-color: white;
-    border-radius: 10px;
-    overflow: hidden;
+    border-radius: 0 0 10px 10px;
 }
 
-.table thead th {
-    background-color: var(--primary-color);
+.btn-custom {
+    background-color: #007bff;
     color: white;
     border: none;
+    padding: 8px 20px;
+    border-radius: 5px;
+    transition: all 0.3s;
 }
 
-.table-striped tbody tr:nth-of-type(odd) {
-    background-color: rgba(0,0,0,0.02);
+.btn-custom:hover {
+    background-color: #0056b3;
+    color: white;
+    transform: translateY(-2px);
 }
 
-/* Формы */
-.form-control, .form-select {
-    border-radius: 8px;
-    border: 1px solid #ddd;
-    padding: 10px 15px;
+.group-select {
+    max-width: 300px;
+    margin: 0 auto 20px;
 }
 
-.form-control:focus, .form-select:focus {
-    border-color: var(--secondary-color);
-    box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+.navbar {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-/* Алерты */
 .alert {
     border-radius: 10px;
-    border: none;
-}
-
-/* Футер */
-.footer {
-    background-color: var(--primary-color);
-    color: var(--light-color);
-    padding: 1rem 0;
-}
-
-/* Адаптивность */
-@media (max-width: 768px) {
-    .container {
-        padding: 0 15px;
-    }
-    
-    .card {
-        margin-bottom: 20px;
-    }
 }
