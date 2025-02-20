@@ -1,149 +1,149 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="row mb-4">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">
-                    <i class="fas fa-filter me-2"></i>Фильтры
-                </h5>
-                <form method="GET" class="row g-3">
-                    <div class="col-md-3">
-                        <select name="day" class="form-select">
-                            <option value="">День недели</option>
-                            <option value="Понедельник">Понедельник</option>
-                            <option value="Вторник">Вторник</option>
-                            <option value="Среда">Среда</option>
-                            <option value="Четверг">Четверг</option>
-                            <option value="Пятница">Пятница</option>
-                            <option value="Суббота">Суббота</option>
-                        </select>
-                    </div>
-                    <div class="col-md-3">
-                        <select name="group" class="form-select">
-                            <option value="">Группа</option>
-                            {% for group in groups %}
-                            <option value="{{ group }}">{{ group }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div class="col-md-3">
-                        <select name="teacher" class="form-select">
-                            <option value="">Преподаватель</option>
-                            {% for teacher in teachers %}
-                            <option value="{{ teacher }}">{{ teacher }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div class="col-md-3">
-                        <button type="submit" class="btn btn-custom w-100">
-                            <i class="fas fa-search me-2"></i>Применить
-                        </button>
-                    </div>
-                </form>
-            </div>
+<div class="container">
+    <!-- Фильтры -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title mb-3">
+                <i class="fas fa-filter me-2"></i>Фильтры
+            </h5>
+            <form method="GET" class="row g-3">
+                <div class="col-md-4">
+                    <select name="day" class="form-select">
+                        <option value="">День недели</option>
+                        {% for day in ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'] %}
+                        <option value="{{ day }}" {% if selected_day == day %}selected{% endif %}>
+                            {{ day }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <select name="group" class="form-select">
+                        <option value="">Группа</option>
+                        {% for group in groups %}
+                        <option value="{{ group }}" {% if selected_group == group %}selected{% endif %}>
+                            {{ group }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <select name="teacher" class="form-select">
+                        <option value="">Преподаватель</option>
+                        {% for teacher in teachers %}
+                        <option value="{{ teacher }}" {% if selected_teacher == teacher %}selected{% endif %}>
+                            {{ teacher }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-search me-2"></i>Применить фильтры
+                    </button>
+                    <a href="{{ url_for('schedule') }}" class="btn btn-secondary">
+                        <i class="fas fa-times me-2"></i>Сбросить
+                    </a>
+                </div>
+            </form>
         </div>
     </div>
-</div>
 
-{% if current_user.is_admin %}
-<div class="row mb-4">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">
-                    <i class="fas fa-plus-circle me-2"></i>Добавить занятие
-                </h5>
-                <form method="POST" action="{{ url_for('add_schedule') }}" class="row g-3">
-                    <div class="col-md-2">
-                        <select name="day" class="form-select" required>
-                            <option value="">День недели</option>
-                            <option value="Понедельник">Понедельник</option>
-                            <option value="Вторник">Вторник</option>
-                            <option value="Среда">Среда</option>
-                            <option value="Четверг">Четверг</option>
-                            <option value="Пятница">Пятница</option>
-                            <option value="Суббота">Суббота</option>
-                        </select>
-                    </div>
-                    <div class="col-md-2">
-                        <input type="time" class="form-control" name="time" required>
-                    </div>
-                    <div class="col-md-2">
-                        <input type="text" class="form-control" name="subject" placeholder="Предмет" required>
-                    </div>
-                    <div class="col-md-2">
-                        <input type="text" class="form-control" name="teacher" placeholder="Преподаватель" required>
-                    </div>
-                    <div class="col-md-2">
-                        <input type="text" class="form-control" name="room" placeholder="Аудитория" required>
-                    </div>
-                    <div class="col-md-2">
-                        <input type="text" class="form-control" name="group_name" placeholder="Группа" required>
-                    </div>
-                    <div class="col-12">
-                        <button type="submit" class="btn btn-custom">
-                            <i class="fas fa-plus me-2"></i>Добавить
-                        </button>
-                    </div>
-                </form>
-            </div>
+    {% if current_user.is_admin %}
+    <!-- Форма добавления расписания -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title mb-3">
+                <i class="fas fa-plus me-2"></i>Добавить расписание
+            </h5>
+            <form method="POST" action="{{ url_for('add_schedule') }}" class="row g-3">
+                <div class="col-md-2">
+                    <select name="day" class="form-select" required>
+                        <option value="">День недели</option>
+                        {% for day in ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'] %}
+                        <option value="{{ day }}">{{ day }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <input type="time" name="time" class="form-control" required>
+                </div>
+                <div class="col-md-2">
+                    <input type="text" name="subject" class="form-control" placeholder="Предмет" required>
+                </div>
+                <div class="col-md-2">
+                    <input type="text" name="teacher" class="form-control" placeholder="Преподаватель" required>
+                </div>
+                <div class="col-md-2">
+                    <input type="text" name="room" class="form-control" placeholder="Кабинет" required>
+                </div>
+                <div class="col-md-2">
+                    <input type="text" name="group_name" class="form-control" placeholder="Группа" required>
+                </div>
+                <div class="col-12">
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-plus me-2"></i>Добавить
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
-</div>
-{% endif %}
+    {% endif %}
 
-<div class="card">
-    <div class="card-body">
-        <h5 class="card-title mb-4">
-            <i class="fas fa-list me-2"></i>Расписание занятий
-        </h5>
-        {% if schedules %}
-        <div class="table-responsive">
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th><i class="fas fa-calendar-day me-2"></i>День</th>
-                        <th><i class="fas fa-clock me-2"></i>Время</th>
-                        <th><i class="fas fa-book me-2"></i>Предмет</th>
-                        <th><i class="fas fa-chalkboard-teacher me-2"></i>Преподаватель</th>
-                        <th><i class="fas fa-door-open me-2"></i>Аудитория</th>
-                        <th><i class="fas fa-users me-2"></i>Группа</th>
-                        {% if current_user.is_admin %}
-                        <th><i class="fas fa-cog me-2"></i>Действия</th>
-                        {% endif %}
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for schedule in schedules %}
-                    <tr>
-                        <td>{{ schedule.day }}</td>
-                        <td>{{ schedule.time }}</td>
-                        <td>{{ schedule.subject }}</td>
-                        <td>{{ schedule.teacher }}</td>
-                        <td>{{ schedule.room }}</td>
-                        <td>{{ schedule.group_name }}</td>
-                        {% if current_user.is_admin %}
-                        <td>
-                            <a href="{{ url_for('delete_schedule', id=schedule.id) }}" 
-                               class="btn btn-danger btn-sm"
-                               onclick="return confirm('Вы уверены, что хотите удалить это занятие?')">
-                                <i class="fas fa-trash me-1"></i>Удалить
-                            </a>
-                        </td>
-                        {% endif %}
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+    <!-- Таблица расписания -->
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title mb-3">
+                <i class="fas fa-calendar-alt me-2"></i>Расписание
+            </h5>
+            {% if schedules %}
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>День</th>
+                            <th>Время</th>
+                            <th>Предмет</th>
+                            <th>Преподаватель</th>
+                            <th>Кабинет</th>
+                            <th>Группа</th>
+                            {% if current_user.is_admin %}
+                            <th>Действия</th>
+                            {% endif %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for schedule in schedules %}
+                        <tr>
+                            <td>{{ schedule.day }}</td>
+                            <td>{{ schedule.time }}</td>
+                            <td>{{ schedule.subject }}</td>
+                            <td>{{ schedule.teacher }}</td>
+                            <td>{{ schedule.room }}</td>
+                            <td>{{ schedule.group_name }}</td>
+                            {% if current_user.is_admin %}
+                            <td>
+                                <a href="{{ url_for('delete_schedule', id=schedule.id) }}" 
+                                   class="btn btn-danger btn-sm"
+                                   onclick="return confirm('Вы уверены, что хотите удалить это расписание?')">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </td>
+                            {% endif %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="text-center text-muted py-5">
+                <i class="fas fa-calendar-times fa-3x mb-3"></i>
+                <p>Расписание не найдено</p>
+            </div>
+            {% endif %}
         </div>
-        {% else %}
-        <div class="text-center text-muted py-5">
-            <i class="fas fa-calendar-times fa-3x mb-3"></i>
-            <p>Расписание не найдено</p>
-        </div>
-        {% endif %}
     </div>
 </div>
 {% endblock %}
