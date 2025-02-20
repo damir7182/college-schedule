@@ -1,15 +1,16 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="row mb-4">
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">
-                    <i class="fas fa-filter me-2"></i>Выберите группу
-                </h5>
-                <form method="GET" class="row g-3">
-                    <div class="col-auto flex-grow-1">
+<div class="container fade-in">
+    <!-- Выбор группы -->
+    <div class="row mb-4">
+        <div class="col-md-6 mx-auto">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title text-center">
+                        <i class="fas fa-users me-2"></i>Выберите группу
+                    </h5>
+                    <form method="GET" class="d-flex gap-2">
                         <select name="group" class="form-select">
                             <option value="">Все группы</option>
                             {% for group in groups %}
@@ -18,58 +19,50 @@
                             </option>
                             {% endfor %}
                         </select>
-                    </div>
-                    <div class="col-auto">
                         <button type="submit" class="btn btn-custom">
                             <i class="fas fa-search me-2"></i>Показать
                         </button>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<div class="card">
-    <div class="card-body">
-        <h5 class="card-title mb-4">
-            <i class="fas fa-calendar-alt me-2"></i>Расписание занятий
-            {% if selected_group %}
-            <span class="badge bg-primary ms-2">{{ selected_group }}</span>
-            {% endif %}
-        </h5>
-        
-        {% if schedules %}
-        <div class="table-responsive">
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th><i class="fas fa-calendar-day me-2"></i>День</th>
-                        <th><i class="fas fa-clock me-2"></i>Время</th>
-                        <th><i class="fas fa-book me-2"></i>Предмет</th>
-                        <th><i class="fas fa-chalkboard-teacher me-2"></i>Преподаватель</th>
-                        <th><i class="fas fa-door-open me-2"></i>Аудитория</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for schedule in schedules %}
-                    <tr>
-                        <td>{{ schedule.day }}</td>
-                        <td>{{ schedule.time }}</td>
-                        <td>{{ schedule.subject }}</td>
-                        <td>{{ schedule.teacher }}</td>
-                        <td>{{ schedule.room }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        {% else %}
-        <div class="text-center text-muted py-5">
-            <i class="fas fa-calendar-times fa-3x mb-3"></i>
-            <p>Расписание не найдено</p>
-        </div>
-        {% endif %}
-    </div>
-</div>
-{% endblock %}
+    {% if selected_group %}
+    <!-- Расписание по дням недели -->
+    <div class="row">
+        {% set days = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'] %}
+        {% for day in days %}
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-calendar-day me-2"></i>{{ day }}
+                    </h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th class="text-center" width="15%">Пара</th>
+                                    <th width="25%">Время</th>
+                                    <th width="25%">Предмет</th>
+                                    <th width="20%">Преподаватель</th>
+                                    <th width="15%">Кабинет</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% set day_schedules = schedules|selectattr('day', 'equalto', day)|sort(attribute='time')|list %}
+                                {% if day_schedules %}
+                                    {% for schedule in day_schedules %}
+                                    <tr>
+                                        <td class="text-center">
+                                            <span class="badge bg-primary">{{ loop.index }}</span>
+                                        </td>
+                                        <td>{{ schedule.time }}</td>
+                                        <td>{{ schedule.subject }}</td>
+                                        <td>{{ schedule.teacher }}</td>
+                                        <td>{{ schedule.room }}</td>
+                                    </tr>
+                                    {%
