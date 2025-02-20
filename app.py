@@ -72,6 +72,9 @@ def student():
             schedules = Schedule.query.filter_by(group_name=selected_group)\
                                     .order_by(day_order, Schedule.time)\
                                     .all()
+            
+            if not schedules:
+                flash(f'Для группы {selected_group} расписание пока не добавлено', 'info')
         
         return render_template('public_schedule.html',
                              groups=groups,
@@ -103,20 +106,16 @@ def schedule():
         return redirect(url_for('index'))
     
     try:
-        # Получаем параметры фильтрации
         filter_day = request.args.get('day')
         filter_group = request.args.get('group')
 
-        # Базовый запрос
         query = Schedule.query
 
-        # Применяем фильтры
         if filter_day:
             query = query.filter(Schedule.day == filter_day)
         if filter_group:
             query = query.filter(Schedule.group_name == filter_group)
 
-        # Определяем порядок дней недели
         day_order = case({
             'Понедельник': 1,
             'Вторник': 2,
@@ -126,13 +125,8 @@ def schedule():
             'Суббота': 6
         }, value=Schedule.day)
 
-        # Получаем отсортированное расписание
         schedules = query.order_by(day_order, Schedule.time).all()
-
-        # Получаем список всех групп
         groups = sorted(list(set(s.group_name for s in Schedule.query.all())))
-
-        # Список дней недели
         days = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота']
 
         return render_template('schedule.html', 
@@ -142,7 +136,7 @@ def schedule():
                             selected_day=filter_day,
                             selected_group=filter_group)
     except Exception as e:
-        print(f"Error in schedule route: {str(e)}")  # Для отладки
+        print(f"Error in schedule route: {str(e)}")
         flash('Произошла ошибка при загрузке расписания', 'danger')
         return redirect(url_for('index'))
 
@@ -199,7 +193,6 @@ def delete_schedule(id):
 def init_db():
     try:
         with app.app_context():
-            # Создаем все таблицы
             db.create_all()
             
             # Создаем администратора, если его нет
@@ -208,6 +201,7 @@ def init_db():
                 admin = User(username='admin', is_admin=True)
                 admin.set_password('admin')
                 db.session.add(admin)
+                db.session.commit()
                 
                 # Добавляем тестовое расписание
                 test_schedules = [
@@ -237,17 +231,22 @@ def init_db():
                     )
                 ]
                 
-                # Добавляем тестовые данные
                 for schedule in test_schedules:
                     db.session.add(schedule)
-            
-            # Сохраняем изменения
-            db.session.commit()
-            print('База данных успешно инициализирована!')
+                
+                db.session.commit()
+                print('База данных успешно инициализирована!')
     except Exception as e:
         print(f'Ошибка при инициализации базы данных: {str(e)}')
         db.session.rollback()
 
 if __name__ == '__main__':
-    init_db()  # Инициализация базы данных при запуске
+    # Удаляем старую базу данных при запуске
+    if os.path.exists('college_schedule.db'):
+        os.remove('college_schedule.db')
+    
+    # Инициализируем новую базу данных
+    with app.app_context():
+        init_db()
+    
     app.run(debug=True)
