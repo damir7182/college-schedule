@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Управление расписанием</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Управление расписанием</h1>
+        <form method="POST" action="{{ url_for('add_schedule') }}" class="add-form">
+            <input type="text" name="day" placeholder="День недели" required>
+            <input type="text" name="time" placeholder="Время" required>
+            <input type="text" name="subject" placeholder="Предмет" required>
+            <input type="text" name="teacher" placeholder="Преподаватель" required>
+            <input type="text" name="room" placeholder="Кабинет" required>
+            <input type="text" name="group_name" placeholder="Группа" required>
+            <button type="submit" class="button">Добавить</button>
+        </form>
+        
+        <table>
+            <tr>
+                <th>День</th>
+                <th>Время</th>
+                <th>Предмет</th>
+                <th>Преподаватель</th>
+                <th>Кабинет</th>
+                <th>Группа</th>
+                <th>Действия</th>
+            </tr>
+            {% for schedule in schedules %}
+            <tr>
+                <td>{{ schedule.day }}</td>
+                <td>{{ schedule.time }}</td>
+                <td>{{ schedule.subject }}</td>
+                <td>{{ schedule.teacher }}</td>
+                <td>{{ schedule.room }}</td>
+                <td>{{ schedule.group_name }}</td>
+                <td>
+                    <a href="{{ url_for('delete_schedule', id=schedule.id) }}" class="delete-button">Удалить</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        <a href="{{ url_for('logout') }}" class="button">Выйти</a>
+    </div>
+</body>
+</html>
