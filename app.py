@@ -13,6 +13,16 @@ db = SQLAlchemy(app)
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 
+# Проверка сессии перед каждым запросом
+@app.before_request
+def check_user_status():
+    if current_user.is_authenticated:
+        if request.endpoint != 'logout':
+            if not current_user.is_admin and 'admin' in request.path:
+                logout_user()
+                flash('Сессия завершена')
+                return redirect(url_for('index'))
+
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
@@ -65,6 +75,7 @@ def login():
         user = User.query.filter_by(username=request.form['username']).first()
         if user and user.check_password(request.form['password']):
             login_user(user)
+            flash('Вы успешно вошли в систему')
             return redirect(url_for('schedule'))
         flash('Неверное имя пользователя или пароль')
     return render_template('login.html')
@@ -79,6 +90,7 @@ def schedule():
 @login_required
 def logout():
     logout_user()
+    flash('Вы успешно вышли из системы')
     return redirect(url_for('index'))
 
 @app.route('/add_schedule', methods=['POST'])
@@ -97,6 +109,7 @@ def add_schedule():
     )
     db.session.add(new_schedule)
     db.session.commit()
+    flash('Расписание успешно добавлено')
     return redirect(url_for('schedule'))
 
 @app.route('/delete_schedule/<int:id>')
@@ -108,6 +121,7 @@ def delete_schedule(id):
     schedule = Schedule.query.get_or_404(id)
     db.session.delete(schedule)
     db.session.commit()
+    flash('Расписание успешно удалено')
     return redirect(url_for('schedule'))
 
 with app.app_context():
