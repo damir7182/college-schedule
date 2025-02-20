@@ -1,18 +1,37 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Вход - Расписание колледжа</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-    <div class="container">
-        <h1>Вход для администратора</h1>
-        <form method="POST" class="login-form">
-            <input type="text" name="username" placeholder="Имя пользователя" required>
-            <input type="password" name="password" placeholder="Пароль" required>
-            <button type="submit" class="button">Войти</button>
-        </form>
-        <a href="{{ url_for('index') }}" class="button">Назад</a>
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-4">
+        <div class="card">
+            <div class="card-body p-4">
+                <div class="text-center mb-4">
+                    <i class="fas fa-user-circle fa-3x text-primary"></i>
+                    <h3 class="card-title mt-3">Вход в систему</h3>
+                </div>
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">
+                            <i class="fas fa-user me-2"></i>Имя пользователя
+                        </label>
+                        <input type="text" class="form-control" id="username" name="username" 
+                               required autocomplete="username">
+                    </div>
+                    <div class="mb-4">
+                        <label for="password" class="form-label">
+                            <i class="fas fa-lock me-2"></i>Пароль
+                        </label>
+                        <input type="password" class="form-control" id="password" name="password" 
+                               required autocomplete="current-password">
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-custom">
+                            <i class="fas fa-sign-in-alt me-2"></i>Войти
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-</body>
-</html>
+</div>
+{% endblock %}
