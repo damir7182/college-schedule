@@ -1,8 +1,13 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, send_from_directory
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 import os
+import logging
+
+# Настройка логирования
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 
 # Инициализация приложения
 app = Flask(__name__)
@@ -41,7 +46,10 @@ class Schedule(db.Model):
 
 @login_manager.user_loader
 def load_user(user_id):
-    return User.query.get(int(user_id))
+    try:
+        return User.query.get(int(user_id))
+    except:
+        return None
 
 # Маршруты
 @app.route('/')
@@ -50,20 +58,25 @@ def index():
 
 @app.route('/student')
 def student():
-    selected_group = request.args.get('group')
-    all_schedules = Schedule.query.all()
-    groups = sorted(list(set(s.group_name for s in all_schedules)))
-    schedules = []
-    
-    if selected_group:
-        schedules = Schedule.query.filter_by(group_name=selected_group)\
-                                .order_by(Schedule.day, Schedule.time)\
-                                .all()
-    
-    return render_template('public_schedule.html',
-                         groups=groups,
-                         selected_group=selected_group,
-                         schedules=schedules)
+    try:
+        selected_group = request.args.get('group')
+        all_schedules = Schedule.query.all()
+        groups = sorted(list(set(s.group_name for s in all_schedules)))
+        schedules = []
+        
+        if selected_group:
+            schedules = Schedule.query.filter_by(group_name=selected_group)\
+                                    .order_by(Schedule.day, Schedule.time)\
+                                    .all()
+        
+        return render_template('public_schedule.html',
+                             groups=groups,
+                             selected_group=selected_group,
+                             schedules=schedules)
+    except Exception as e:
+        logger.error(f"Error in student route: {str(e)}")
+        flash('Произошла ошибка при загрузке расписания', 'error')
+        return redirect(url_for('index'))
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -81,33 +94,38 @@ def login():
 @app.route('/schedule')
 @login_required
 def schedule():
-    filter_day = request.args.get('day')
-    filter_group = request.args.get('group')
-    filter_teacher = request.args.get('teacher')
+    try:
+        filter_day = request.args.get('day')
+        filter_group = request.args.get('group')
+        filter_teacher = request.args.get('teacher')
 
-    query = Schedule.query
+        query = Schedule.query
 
-    if filter_day:
-        query = query.filter(Schedule.day == filter_day)
-    if filter_group:
-        query = query.filter(Schedule.group_name == filter_group)
-    if filter_teacher:
-        query = query.filter(Schedule.teacher == filter_teacher)
+        if filter_day:
+            query = query.filter(Schedule.day == filter_day)
+        if filter_group:
+            query = query.filter(Schedule.group_name == filter_group)
+        if filter_teacher:
+            query = query.filter(Schedule.teacher == filter_teacher)
 
-    schedules = query.order_by(Schedule.day, Schedule.time).all()
-    all_schedules = Schedule.query.all()
-    groups = sorted(list(set(s.group_name for s in all_schedules)))
-    teachers = sorted(list(set(s.teacher for s in all_schedules)))
-    days = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота']
+        schedules = query.order_by(Schedule.day, Schedule.time).all()
+        all_schedules = Schedule.query.all()
+        groups = sorted(list(set(s.group_name for s in all_schedules)))
+        teachers = sorted(list(set(s.teacher for s in all_schedules)))
+        days = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота']
 
-    return render_template('schedule.html', 
-                        schedules=schedules,
-                        groups=groups,
-                        teachers=teachers,
-                        days=days,
-                        selected_day=filter_day,
-                        selected_group=filter_group,
-                        selected_teacher=filter_teacher)
+        return render_template('schedule.html', 
+                            schedules=schedules,
+                            groups=groups,
+                            teachers=teachers,
+                            days=days,
+                            selected_day=filter_day,
+                            selected_group=filter_group,
+                            selected_teacher=filter_teacher)
+    except Exception as e:
+        logger.error(f"Error in schedule route: {str(e)}")
+        flash('Произошла ошибка при загрузке расписания', 'error')
+        return redirect(url_for('index'))
 
 @app.route('/logout')
 @login_required
@@ -135,6 +153,7 @@ def add_schedule():
         db.session.commit()
         flash('Расписание успешно добавлено', 'success')
     except Exception as e:
+        logger.error(f"Error adding schedule: {str(e)}")
         flash('Ошибка при добавлении расписания', 'error')
         db.session.rollback()
     
@@ -153,6 +172,7 @@ def delete_schedule(id):
         db.session.commit()
         flash('Расписание успешно удалено', 'success')
     except Exception as e:
+        logger.error(f"Error deleting schedule: {str(e)}")
         flash('Ошибка при удалении расписания', 'error')
         db.session.rollback()
     
@@ -166,6 +186,7 @@ def init_db():
             admin.set_password('admin')
             db.session.add(admin)
             db.session.commit()
+            print('Admin created successfully!')
 
 if __name__ == '__main__':
     init_db()
