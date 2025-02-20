@@ -1,88 +1,63 @@
-{% extends "base.html" %}
+body {
+    background-color: #f8f9fa;
+    min-height: 100vh;
+}
 
-{% block content %}
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-10">
-            <h2 class="text-center mb-4">
-                <i class="fas fa-calendar-alt me-2"></i>Расписание занятий
-            </h2>
+.card {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+}
 
-            <!-- Выбор группы -->
-            <div class="card mb-4">
-                <div class="card-body">
-                    <form method="GET" class="row g-3 align-items-end">
-                        <div class="col-md-10">
-                            <label for="group" class="form-label">Выберите группу:</label>
-                            <select name="group" id="group" class="form-select" onchange="this.form.submit()">
-                                <option value="">Выберите группу</option>
-                                {% for group in groups %}
-                                <option value="{{ group }}" {% if selected_group == group %}selected{% endif %}>
-                                    {{ group }}
-                                </option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </form>
-                </div>
-            </div>
+.card-header {
+    border-radius: 10px 10px 0 0 !important;
+}
 
-            {% if selected_group %}
-                {% if schedules %}
-                    {% set days = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'] %}
-                    {% for day in days %}
-                        <div class="card mb-4">
-                            <div class="card-header bg-primary text-white">
-                                <h5 class="mb-0">{{ day }}</h5>
-                            </div>
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th width="15%">Время</th>
-                                                <th width="35%">Предмет</th>
-                                                <th width="30%">Преподаватель</th>
-                                                <th width="20%">Кабинет</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {% set day_schedules = schedules|selectattr('day', 'equalto', day)|list %}
-                                            {% if day_schedules %}
-                                                {% for schedule in day_schedules|sort(attribute='time') %}
-                                                <tr>
-                                                    <td>{{ schedule.time }}</td>
-                                                    <td>{{ schedule.subject }}</td>
-                                                    <td>{{ schedule.teacher }}</td>
-                                                    <td>{{ schedule.room }}</td>
-                                                </tr>
-                                                {% endfor %}
-                                            {% else %}
-                                                <tr>
-                                                    <td colspan="4" class="text-center text-muted">
-                                                        Нет занятий
-                                                    </td>
-                                                </tr>
-                                            {% endif %}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    {% endfor %}
-                {% else %}
-                    <div class="alert alert-info text-center">
-                        <i class="fas fa-info-circle me-2"></i>
-                        Расписание для выбранной группы не найдено
-                    </div>
-                {% endif %}
-            {% else %}
-                <div class="alert alert-info text-center">
-                    <i class="fas fa-info-circle me-2"></i>
-                    Выберите группу для просмотра расписания
-                </div>
-            {% endif %}
-        </div>
-    </div>
-</div>
-{% endblock %}
+.table th {
+    background-color: #f8f9fa;
+}
+
+.day-schedule {
+    margin-bottom: 30px;
+}
+
+.day-header {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 10px 10px 0 0;
+    margin-bottom: 0;
+}
+
+.schedule-table {
+    background-color: white;
+    border-radius: 0 0 10px 10px;
+}
+
+.btn-custom {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 5px;
+    transition: all 0.3s;
+}
+
+.btn-custom:hover {
+    background-color: #0056b3;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.group-select {
+    max-width: 300px;
+    margin: 0 auto 20px;
+}
+
+.navbar {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.alert {
+    border-radius: 10px;
+}
