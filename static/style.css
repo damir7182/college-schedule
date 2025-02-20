@@ -1,172 +1,204 @@
-:root {
-    --primary-color: #4f46e5;
-    --hover-color: #4338ca;
-    --background-color: #f9fafb;
-    --card-background: #ffffff;
-    --text-color: #1f2937;
-    --border-color: #e5e7eb;
-}
-
+/* Основные стили */
 body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: var(--background-color);
-    color: var(--text-color);
-    line-height: 1.5;
+    background-color: #f0f2f5;
 }
 
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 2rem;
+    padding: 20px;
 }
 
-h1 {
+/* Навигационная панель */
+.navbar {
+    background-color: #1a73e8;
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Стили для стартовой страницы */
+.welcome-screen {
+    max-width: 600px;
+    margin: 50px auto;
     text-align: center;
-    color: var(--text-color);
-    font-size: 2.25rem;
-    font-weight: 700;
-    margin-bottom: 2rem;
+    padding: 40px 20px;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
-.card {
-    background: var(--card-background);
-    border-radius: 1rem;
-    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-    padding: 2rem;
-    margin-bottom: 2rem;
+.welcome-screen h1 {
+    color: #1a73e8;
+    margin-bottom: 20px;
+    font-size: 32px;
 }
 
-.buttons {
+.welcome-screen p {
+    color: #5f6368;
+    margin-bottom: 30px;
+    font-size: 18px;
+}
+
+.choice-buttons {
     display: flex;
     justify-content: center;
-    gap: 1rem;
+    gap: 20px;
     flex-wrap: wrap;
 }
 
-.button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.75rem 1.5rem;
-    background-color: var(--primary-color);
-    color: white;
-    text-decoration: none;
-    border-radius: 0.5rem;
-    border: none;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s;
-    min-width: 120px;
-}
-
-.button:hover {
-    background-color: var(--hover-color);
-    transform: translateY(-1px);
-}
-
-.login-form, .add-form {
+.choice-btn {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-    max-width: 400px;
-    margin: 0 auto;
-}
-
-input[type="text"],
-input[type="password"],
-select {
-    padding: 0.75rem 1rem;
-    border: 1px solid var(--border-color);
-    border-radius: 0.5rem;
-    font-size: 1rem;
-    transition: border-color 0.2s;
-}
-
-input[type="text"]:focus,
-input[type="password"]:focus,
-select:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
-}
-
-table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0;
-    margin-top: 2rem;
-    background: var(--card-background);
-    border-radius: 0.5rem;
-    overflow: hidden;
-    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-}
-
-th, td {
-    padding: 1rem;
-    text-align: left;
-    border-bottom: 1px solid var(--border-color);
-}
-
-th {
-    background-color: #f8fafc;
-    font-weight: 600;
-    color: var(--text-color);
-}
-
-tr:last-child td {
-    border-bottom: none;
-}
-
-tr:hover {
-    background-color: #f8fafc;
-}
-
-.delete-button {
-    color: #dc2626;
+    align-items: center;
+    padding: 30px;
+    width: 200px;
     text-decoration: none;
+    border-radius: 8px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.choice-btn:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.student-btn {
+    background-color: #1a73e8;
+    color: white;
+}
+
+.admin-btn {
+    background-color: #34a853;
+    color: white;
+}
+
+.btn-icon {
+    font-size: 40px;
+    margin-bottom: 15px;
+}
+
+.btn-text {
+    font-size: 18px;
     font-weight: 500;
 }
 
-.delete-button:hover {
-    color: #b91c1c;
-}
-
+/* Стили для формы фильтрации */
 .filter-form {
-    margin-bottom: 2rem;
-    text-align: center;
+    background-color: #f8f9fa;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
-select {
+.filter-form h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.filter-group {
+    display: inline-block;
+    margin-right: 20px;
+    margin-bottom: 10px;
+}
+
+.filter-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.filter-group select {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
     min-width: 200px;
-    background-color: white;
 }
 
-.back-button {
-    margin-top: 2rem;
-    text-align: center;
+/* Кнопки навигации */
+.back-btn, .admin-btn, .reset-btn {
+    color: white;
+    text-decoration: none;
+    padding: 8px 15px;
+    background-color: rgba(255,255,255,0.1);
+    border-radius: 4px;
+    transition: background-color 0.3s;
 }
 
-@media (max-width: 768px) {
+.back-btn:hover, .admin-btn:hover, .reset-btn:hover {
+    background-color: rgba(255,255,255,0.2);
+}
+
+/* Адаптивность */
+@media (max-width: 480px) {
+    .welcome-screen {
+        margin: 20px;
+        padding: 30px 15px;
+    }
+
+    .choice-btn {
+        width: 100%;
+        margin-bottom: 15px;
+    }
+    
     .container {
-        padding: 1rem;
+        padding: 10px;
     }
+    
+    .filter-group select {
+        width: 100%;
+    }
+}
 
-    h1 {
-        font-size: 1.75rem;
-    }
+/* Таблица расписания */
+.schedule-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: white;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
 
-    .card {
-        padding: 1rem;
-    }
+.schedule-table th,
+.schedule-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
 
-    table {
-        display: block;
-        overflow-x: auto;
-    }
+.schedule-table th {
+    background-color: #1a73e8;
+    color: white;
+    font-weight: 500;
+}
 
-    th, td {
-        padding: 0.75rem;
-    }
+.schedule-table tr:hover {
+    background-color: #f8f9fa;
+}
+
+/* Сообщения */
+.no-classes {
+    text-align: center;
+    color: #6c757d;
+    font-style: italic;
+    padding: 20px !important;
+}
+
+.select-group-message {
+    text-align: center;
+    padding: 40px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    color: #6c757d;
+    font-size: 18px;
 }
