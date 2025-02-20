@@ -1,32 +1,35 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="row justify-content-center mb-4">
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-body">
-                <form method="GET" class="text-center">
-                    <label for="group" class="form-label h5">Выберите группу:</label>
-                    <select name="group" id="group" class="form-select mb-3" onchange="this.form.submit()">
-                        <option value="">-- Выберите группу --</option>
-                        {% for group in groups %}
-                        <option value="{{ group }}" {% if selected_group == group %}selected{% endif %}>
-                            {{ group }}
-                        </option>
-                        {% endfor %}
-                    </select>
-                </form>
+<div class="container">
+    <!-- Выбор группы -->
+    <div class="row justify-content-center mb-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h4 class="card-title mb-3">Расписание занятий</h4>
+                    <form method="GET" class="form-group">
+                        <select name="group" id="group" class="form-select form-select-lg mb-3" onchange="this.form.submit()">
+                            <option value="">Выберите свою группу</option>
+                            {% for group in groups %}
+                            <option value="{{ group }}" {% if selected_group == group %}selected{% endif %}>
+                                {{ group }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-{% if selected_group %}
-    {% set days = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'] %}
+    {% if selected_group %}
+    <!-- Расписание по дням недели -->
     <div class="row">
+        {% set days = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'] %}
         {% for day in days %}
         <div class="col-md-6 mb-4">
-            <div class="card day-schedule">
+            <div class="card">
                 <div class="card-header bg-primary text-white">
                     <h5 class="mb-0">{{ day }}</h5>
                 </div>
@@ -35,10 +38,10 @@
                         <table class="table table-striped mb-0">
                             <thead>
                                 <tr>
-                                    <th>Время</th>
-                                    <th>Предмет</th>
-                                    <th>Преподаватель</th>
-                                    <th>Кабинет</th>
+                                    <th style="width: 20%">Время</th>
+                                    <th style="width: 35%">Предмет</th>
+                                    <th style="width: 30%">Преподаватель</th>
+                                    <th style="width: 15%">Кабинет</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -54,8 +57,8 @@
                                     {% endfor %}
                                 {% else %}
                                     <tr>
-                                        <td colspan="4" class="text-center text-muted">
-                                            Нет занятий
+                                        <td colspan="4" class="text-center text-muted py-3">
+                                            <i class="fas fa-calendar-xmark me-2"></i>Нет занятий
                                         </td>
                                     </tr>
                                 {% endif %}
@@ -67,10 +70,12 @@
         </div>
         {% endfor %}
     </div>
-{% else %}
+    {% else %}
+    <!-- Сообщение о необходимости выбрать группу -->
     <div class="alert alert-info text-center">
         <i class="fas fa-info-circle me-2"></i>
-        Выберите группу для просмотра расписания
+        Выберите свою группу для просмотра расписания
     </div>
-{% endif %}
+    {% endif %}
+</div>
 {% endblock %}
