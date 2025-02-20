@@ -1,178 +1,17 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Управление расписанием</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f0f2f5;
-        }
+{% extends "base.html" %}
 
-        .navbar {
-            background-color: #1a73e8;
-            color: white;
-            padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .nav-buttons {
-            display: flex;
-            gap: 10px;
-        }
-
-        .nav-btn {
-            color: white;
-            text-decoration: none;
-            padding: 8px 15px;
-            background-color: rgba(255,255,255,0.1);
-            border-radius: 4px;
-            transition: background-color 0.3s;
-        }
-
-        .nav-btn:hover {
-            background-color: rgba(255,255,255,0.2);
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .admin-panel {
-            background-color: white;
-            border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            padding: 20px;
-            margin-bottom: 30px;
-        }
-
-        .admin-panel h2 {
-            color: #1a73e8;
-            margin-top: 0;
-            margin-bottom: 20px;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            color: #333;
-            font-weight: 500;
-        }
-
-        .form-group select,
-        .form-group input {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 14px;
-        }
-
-        .add-btn {
-            background-color: #34a853;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-            transition: background-color 0.3s;
-        }
-
-        .add-btn:hover {
-            background-color: #2d8a46;
-        }
-
-        .schedule-table {
-            width: 100%;
-            border-collapse: collapse;
-            background-color: white;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-
-        .schedule-table th {
-            background-color: #1a73e8;
-            color: white;
-            font-weight: 500;
-            padding: 12px 15px;
-            text-align: left;
-        }
-
-        .schedule-table td {
-            padding: 12px 15px;
-            border-bottom: 1px solid #eee;
-        }
-
-        .schedule-table tr:hover {
-            background-color: #f8f9fa;
-        }
-
-        .delete-btn {
-            color: #dc2626;
-            text-decoration: none;
-            font-size: 14px;
-            transition: color 0.3s;
-        }
-
-        .delete-btn:hover {
-            color: #b91c1c;
-        }
-
-        .filters {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 10px;
-            }
-            
-            .admin-panel {
-                padding: 15px;
-            }
-            
-            .schedule-table {
-                display: block;
-                overflow-x: auto;
-            }
-        }
-    </style>
-</head>
-<body>
-    <nav class="navbar">
-        <span>Управление расписанием</span>
-        <div class="nav-buttons">
-            <a href="{{ url_for('index') }}" class="nav-btn">На главную</a>
-            <a href="{{ url_for('logout') }}" class="nav-btn">Выйти</a>
-        </div>
-    </nav>
-
-    <div class="container">
-        <div class="admin-panel">
-            <h2>Добавить занятие</h2>
-            <form action="{{ url_for('add_schedule') }}" method="POST">
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
-                    <div class="form-group">
-                        <label for="day">День недели</label>
-                        <select id="day" name="day" required>
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="fas fa-filter me-2"></i>Фильтры
+                </h5>
+                <form method="GET" class="row g-3">
+                    <div class="col-md-3">
+                        <select name="day" class="form-select">
+                            <option value="">День недели</option>
                             <option value="Понедельник">Понедельник</option>
                             <option value="Вторник">Вторник</option>
                             <option value="Среда">Среда</option>
@@ -181,102 +20,130 @@
                             <option value="Суббота">Суббота</option>
                         </select>
                     </div>
-                    <div class="form-group">
-                        <label for="time">Время</label>
-                        <input type="text" id="time" name="time" required placeholder="8:00-9:30">
-                    </div>
-                    <div class="form-group">
-                        <label for="subject">Предмет</label>
-                        <input type="text" id="subject" name="subject" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="teacher">Преподаватель</label>
-                        <input type="text" id="teacher" name="teacher" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="room">Аудитория</label>
-                        <input type="text" id="room" name="room" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="group_name">Группа</label>
-                        <input type="text" id="group_name" name="group_name" required>
-                    </div>
-                </div>
-                <button type="submit" class="add-btn">Добавить занятие</button>
-            </form>
-        </div>
-
-        <div class="admin-panel">
-            <h2>Фильтры</h2>
-            <form action="{{ url_for('schedule') }}" method="GET">
-                <div class="filters">
-                    <div class="form-group">
-                        <label for="filter_day">День недели</label>
-                        <select id="filter_day" name="day">
-                            <option value="">Все дни</option>
-                            <option value="Понедельник" {% if request.args.get('day') == 'Понедельник' %}selected{% endif %}>Понедельник</option>
-                            <option value="Вторник" {% if request.args.get('day') == 'Вторник' %}selected{% endif %}>Вторник</option>
-                            <option value="Среда" {% if request.args.get('day') == 'Среда' %}selected{% endif %}>Среда</option>
-                            <option value="Четверг" {% if request.args.get('day') == 'Четверг' %}selected{% endif %}>Четверг</option>
-                            <option value="Пятница" {% if request.args.get('day') == 'Пятница' %}selected{% endif %}>Пятница</option>
-                            <option value="Суббота" {% if request.args.get('day') == 'Суббота' %}selected{% endif %}>Суббота</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="filter_group">Группа</label>
-                        <select id="filter_group" name="group">
-                            <option value="">Все группы</option>
+                    <div class="col-md-3">
+                        <select name="group" class="form-select">
+                            <option value="">Группа</option>
                             {% for group in groups %}
-                                <option value="{{ group }}" {% if request.args.get('group') == group %}selected{% endif %}>{{ group }}</option>
+                            <option value="{{ group }}">{{ group }}</option>
                             {% endfor %}
                         </select>
                     </div>
-                    <div class="form-group">
-                        <label for="filter_teacher">Преподаватель</label>
-                        <select id="filter_teacher" name="teacher">
-                            <option value="">Все преподаватели</option>
+                    <div class="col-md-3">
+                        <select name="teacher" class="form-select">
+                            <option value="">Преподаватель</option>
                             {% for teacher in teachers %}
-                                <option value="{{ teacher }}" {% if request.args.get('teacher') == teacher %}selected{% endif %}>{{ teacher }}</option>
+                            <option value="{{ teacher }}">{{ teacher }}</option>
                             {% endfor %}
                         </select>
                     </div>
-                </div>
-                <button type="submit" class="add-btn">Применить фильтры</button>
-            </form>
+                    <div class="col-md-3">
+                        <button type="submit" class="btn btn-custom w-100">
+                            <i class="fas fa-search me-2"></i>Применить
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
+    </div>
+</div>
 
-        <div class="admin-panel">
-            <h2>Расписание</h2>
-            <table class="schedule-table">
+{% if current_user.is_admin %}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="fas fa-plus-circle me-2"></i>Добавить занятие
+                </h5>
+                <form method="POST" action="{{ url_for('add_schedule') }}" class="row g-3">
+                    <div class="col-md-2">
+                        <select name="day" class="form-select" required>
+                            <option value="">День недели</option>
+                            <option value="Понедельник">Понедельник</option>
+                            <option value="Вторник">Вторник</option>
+                            <option value="Среда">Среда</option>
+                            <option value="Четверг">Четверг</option>
+                            <option value="Пятница">Пятница</option>
+                            <option value="Суббота">Суббота</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <input type="time" class="form-control" name="time" required>
+                    </div>
+                    <div class="col-md-2">
+                        <input type="text" class="form-control" name="subject" placeholder="Предмет" required>
+                    </div>
+                    <div class="col-md-2">
+                        <input type="text" class="form-control" name="teacher" placeholder="Преподаватель" required>
+                    </div>
+                    <div class="col-md-2">
+                        <input type="text" class="form-control" name="room" placeholder="Аудитория" required>
+                    </div>
+                    <div class="col-md-2">
+                        <input type="text" class="form-control" name="group_name" placeholder="Группа" required>
+                    </div>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-custom">
+                            <i class="fas fa-plus me-2"></i>Добавить
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title mb-4">
+            <i class="fas fa-list me-2"></i>Расписание занятий
+        </h5>
+        {% if schedules %}
+        <div class="table-responsive">
+            <table class="table table-hover">
                 <thead>
                     <tr>
-                        <th>День</th>
-                        <th>Время</th>
-                        <th>Предмет</th>
-                        <th>Преподаватель</th>
-                        <th>Аудитория</th>
-                        <th>Группа</th>
-                        <th>Действия</th>
+                        <th><i class="fas fa-calendar-day me-2"></i>День</th>
+                        <th><i class="fas fa-clock me-2"></i>Время</th>
+                        <th><i class="fas fa-book me-2"></i>Предмет</th>
+                        <th><i class="fas fa-chalkboard-teacher me-2"></i>Преподаватель</th>
+                        <th><i class="fas fa-door-open me-2"></i>Аудитория</th>
+                        <th><i class="fas fa-users me-2"></i>Группа</th>
+                        {% if current_user.is_admin %}
+                        <th><i class="fas fa-cog me-2"></i>Действия</th>
+                        {% endif %}
                     </tr>
                 </thead>
                 <tbody>
                     {% for schedule in schedules %}
-                        <tr>
-                            <td>{{ schedule.day }}</td>
-                            <td>{{ schedule.time }}</td>
-                            <td>{{ schedule.subject }}</td>
-                            <td>{{ schedule.teacher }}</td>
-                            <td>{{ schedule.room }}</td>
-                            <td>{{ schedule.group_name }}</td>
-                            <td>
-                                <a href="{{ url_for('delete_schedule', id=schedule.id) }}" class="delete-btn" 
-                                   onclick="return confirm('Вы уверены, что хотите удалить это занятие?')">Удалить</a>
-                            </td>
-                        </tr>
+                    <tr>
+                        <td>{{ schedule.day }}</td>
+                        <td>{{ schedule.time }}</td>
+                        <td>{{ schedule.subject }}</td>
+                        <td>{{ schedule.teacher }}</td>
+                        <td>{{ schedule.room }}</td>
+                        <td>{{ schedule.group_name }}</td>
+                        {% if current_user.is_admin %}
+                        <td>
+                            <a href="{{ url_for('delete_schedule', id=schedule.id) }}" 
+                               class="btn btn-danger btn-sm"
+                               onclick="return confirm('Вы уверены, что хотите удалить это занятие?')">
+                                <i class="fas fa-trash me-1"></i>Удалить
+                            </a>
+                        </td>
+                        {% endif %}
+                    </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
+        {% else %}
+        <div class="text-center text-muted py-5">
+            <i class="fas fa-calendar-times fa-3x mb-3"></i>
+            <p>Расписание не найдено</p>
+        </div>
+        {% endif %}
     </div>
-</body>
-</html>
+</div>
+{% endblock %}
