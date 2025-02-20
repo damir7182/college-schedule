@@ -1,7 +1,6 @@
-from app import app, init_db
+from app import create_app
 
-# Инициализация базы данных при запуске
-init_db()
+app = create_app()
 
 if __name__ == "__main__":
     app.run()
