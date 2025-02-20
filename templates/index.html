@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Расписание колледжа</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Расписание колледжа</h1>
+        <div class="buttons">
+            <a href="{{ url_for('student') }}" class="button">Просмотр расписания</a>
+            <a href="{{ url_for('admin') }}" class="button">Вход для администратора</a>
+        </div>
+    </div>
+</body>
+</html>
