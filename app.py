@@ -8,8 +8,8 @@ from datetime import datetime
 # Инициализация приложения
 app = Flask(__name__)
 
-# Конфигурация для публичного хостинга
-app.config['SECRET_KEY'] = 'your-secret-key-123'
+# Конфигурация
+app.config['SECRET_KEY'] = 'your-secret-key-123'  # Измените на свой секретный ключ
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///college_schedule.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -54,10 +54,12 @@ def student():
     all_schedules = Schedule.query.all()
     groups = sorted(list(set(s.group_name for s in all_schedules)))
     schedules = []
+    
     if selected_group:
         schedules = Schedule.query.filter_by(group_name=selected_group)\
-                                .order_by(Schedule.time)\
+                                .order_by(Schedule.day, Schedule.time)\
                                 .all()
+    
     return render_template('public_schedule.html',
                          groups=groups,
                          selected_group=selected_group,
@@ -65,7 +67,12 @@ def student():
 
 @app.route('/admin')
 def admin():
-    return redirect(url_for('login'))
+    if not current_user.is_authenticated:
+        return redirect(url_for('login'))
+    if not current_user.is_admin:
+        flash('У вас нет прав администратора')
+        return redirect(url_for('index'))
+    return redirect(url_for('schedule'))
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -76,6 +83,7 @@ def login():
         user = User.query.filter_by(username=request.form['username']).first()
         if user and user.check_password(request.form['password']):
             login_user(user)
+            flash('Вы успешно вошли в систему')
             return redirect(url_for('schedule'))
         flash('Неверное имя пользователя или пароль')
     return render_template('login.html')
@@ -96,7 +104,7 @@ def schedule():
     if filter_teacher:
         query = query.filter(Schedule.teacher == filter_teacher)
 
-    schedules = query.all()
+    schedules = query.order_by(Schedule.day, Schedule.time).all()
     all_schedules = Schedule.query.all()
     groups = sorted(list(set(s.group_name for s in all_schedules)))
     teachers = sorted(list(set(s.teacher for s in all_schedules)))
@@ -110,47 +118,67 @@ def schedule():
 @login_required
 def logout():
     logout_user()
+    flash('Вы вышли из системы')
     return redirect(url_for('index'))
 
 @app.route('/add_schedule', methods=['POST'])
 @login_required
 def add_schedule():
     if not current_user.is_admin:
+        flash('У вас нет прав для добавления расписания')
         return redirect(url_for('schedule'))
     
-    new_schedule = Schedule(
-        day=request.form['day'],
-        time=request.form['time'],
-        subject=request.form['subject'],
-        teacher=request.form['teacher'],
-        room=request.form['room'],
-        group_name=request.form['group_name']
-    )
-    db.session.add(new_schedule)
-    db.session.commit()
+    try:
+        new_schedule = Schedule(
+            day=request.form['day'],
+            time=request.form['time'],
+            subject=request.form['subject'],
+            teacher=request.form['teacher'],
+            room=request.form['room'],
+            group_name=request.form['group_name']
+        )
+        db.session.add(new_schedule)
+        db.session.commit()
+        flash('Расписание успешно добавлено')
+    except Exception as e:
+        flash('Ошибка при добавлении расписания')
+        db.session.rollback()
+    
     return redirect(url_for('schedule'))
 
 @app.route('/delete_schedule/<int:id>')
 @login_required
 def delete_schedule(id):
     if not current_user.is_admin:
+        flash('У вас нет прав для удаления расписания')
         return redirect(url_for('schedule'))
     
-    schedule = Schedule.query.get_or_404(id)
-    db.session.delete(schedule)
-    db.session.commit()
+    try:
+        schedule = Schedule.query.get_or_404(id)
+        db.session.delete(schedule)
+        db.session.commit()
+        flash('Расписание успешно удалено')
+    except Exception as e:
+        flash('Ошибка при удалении расписания')
+        db.session.rollback()
+    
     return redirect(url_for('schedule'))
+
+@app.route('/static/<path:filename>')
+def static_files(filename):
+    return send_from_directory('static', filename)
 
 def init_db():
     with app.app_context():
         db.create_all()
+        # Создание администратора, если его нет
         if not User.query.filter_by(username='admin').first():
             admin = User(username='admin', is_admin=True)
             admin.set_password('admin')
             db.session.add(admin)
             db.session.commit()
-            print('Admin created successfully!')
-
+            print('Администратор успешно создан!')
 
 if __name__ == '__main__':
+    init_db()
     app.run(debug=True)
