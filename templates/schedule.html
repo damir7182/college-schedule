@@ -4,56 +4,84 @@
 <div class="container">
     <!-- Форма добавления расписания -->
     <div class="card mb-4">
-        <div class="card-header bg-primary text-white">
-            <h5 class="mb-0"><i class="fas fa-plus me-2"></i>Добавить расписание</h5>
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">
+                <i class="fas fa-plus-circle me-2"></i>Добавить расписание
+            </h5>
+            <button class="btn btn-light btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#addScheduleForm">
+                <i class="fas fa-chevron-down"></i>
+            </button>
         </div>
-        <div class="card-body">
-            <form method="POST" action="{{ url_for('add_schedule') }}" class="row g-3">
-                <div class="col-md-4">
-                    <label class="form-label">День недели</label>
-                    <select name="day" class="form-select" required>
-                        <option value="">Выберите день</option>
-                        {% for day in ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'] %}
-                        <option value="{{ day }}">{{ day }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label">Время</label>
-                    <input type="time" name="time" class="form-control" required>
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label">Группа</label>
-                    <input type="text" name="group_name" class="form-control" required>
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label">Предмет</label>
-                    <input type="text" name="subject" class="form-control" required>
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label">Преподаватель</label>
-                    <input type="text" name="teacher" class="form-control" required>
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label">Кабинет</label>
-                    <input type="text" name="room" class="form-control" required>
-                </div>
-                <div class="col-12">
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-plus me-2"></i>Добавить
-                    </button>
-                </div>
-            </form>
+        <div class="collapse show" id="addScheduleForm">
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('add_schedule') }}" class="row g-3">
+                    <!-- День недели -->
+                    <div class="col-md-4">
+                        <label class="form-label">День недели</label>
+                        <select name="day" class="form-select" required>
+                            <option value="">Выберите день</option>
+                            {% for day in ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'] %}
+                            <option value="{{ day }}">{{ day }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <!-- Время -->
+                    <div class="col-md-4">
+                        <label class="form-label">Время</label>
+                        <input type="time" name="time" class="form-control" required>
+                    </div>
+                    
+                    <!-- Группа -->
+                    <div class="col-md-4">
+                        <label class="form-label">Группа</label>
+                        <input type="text" name="group_name" class="form-control" list="groupList" required>
+                        <datalist id="groupList">
+                            {% for group in groups %}
+                            <option value="{{ group }}">
+                            {% endfor %}
+                        </datalist>
+                    </div>
+                    
+                    <!-- Предмет -->
+                    <div class="col-md-4">
+                        <label class="form-label">Предмет</label>
+                        <input type="text" name="subject" class="form-control" required>
+                    </div>
+                    
+                    <!-- Преподаватель -->
+                    <div class="col-md-4">
+                        <label class="form-label">Преподаватель</label>
+                        <input type="text" name="teacher" class="form-control" required>
+                    </div>
+                    
+                    <!-- Кабинет -->
+                    <div class="col-md-4">
+                        <label class="form-label">Кабинет</label>
+                        <input type="text" name="room" class="form-control" required>
+                    </div>
+                    
+                    <!-- Кнопка добавления -->
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-plus me-2"></i>Добавить
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 
     <!-- Фильтры -->
     <div class="card mb-4">
         <div class="card-header bg-primary text-white">
-            <h5 class="mb-0"><i class="fas fa-filter me-2"></i>Фильтры</h5>
+            <h5 class="mb-0">
+                <i class="fas fa-filter me-2"></i>Фильтры
+            </h5>
         </div>
         <div class="card-body">
             <form method="GET" class="row g-3">
+                <!-- Фильтр по группе -->
                 <div class="col-md-5">
                     <select name="group" class="form-select">
                         <option value="">Все группы</option>
@@ -64,6 +92,8 @@
                         {% endfor %}
                     </select>
                 </div>
+                
+                <!-- Фильтр по дню -->
                 <div class="col-md-5">
                     <select name="day" class="form-select">
                         <option value="">Все дни</option>
@@ -74,6 +104,8 @@
                         {% endfor %}
                     </select>
                 </div>
+                
+                <!-- Кнопка фильтрации -->
                 <div class="col-md-2">
                     <button type="submit" class="btn btn-primary w-100">
                         <i class="fas fa-search me-2"></i>Найти
@@ -85,13 +117,16 @@
 
     <!-- Таблица расписания -->
     <div class="card">
-        <div class="card-header bg-primary text-white">
-            <h5 class="mb-0"><i class="fas fa-table me-2"></i>Текущее расписание</h5>
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">
+                <i class="fas fa-table me-2"></i>Текущее расписание
+            </h5>
+            <span class="badge bg-light text-primary">Всего: {{ schedules|length }}</span>
         </div>
         <div class="card-body p-0">
             <div class="table-responsive">
-                <table class="table table-striped mb-0">
-                    <thead>
+                <table class="table table-hover table-striped mb-0">
+                    <thead class="table-light">
                         <tr>
                             <th>День</th>
                             <th>Время</th>
@@ -99,31 +134,70 @@
                             <th>Предмет</th>
                             <th>Преподаватель</th>
                             <th>Кабинет</th>
-                            <th>Действия</th>
+                            <th class="text-center">Действия</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% for schedule in schedules %}
-                        <tr>
-                            <td>{{ schedule.day }}</td>
-                            <td>{{ schedule.time }}</td>
-                            <td>{{ schedule.group_name }}</td>
-                            <td>{{ schedule.subject }}</td>
-                            <td>{{ schedule.teacher }}</td>
-                            <td>{{ schedule.room }}</td>
-                            <td>
-                                <a href="{{ url_for('delete_schedule', id=schedule.id) }}" 
-                                   class="btn btn-danger btn-sm"
-                                   onclick="return confirm('Вы уверены, что хотите удалить это расписание?')">
-                                    <i class="fas fa-trash"></i>
-                                </a>
-                            </td>
-                        </tr>
-                        {% endfor %}
+                        {% if schedules %}
+                            {% for schedule in schedules %}
+                            <tr>
+                                <td>{{ schedule.day }}</td>
+                                <td>{{ schedule.time }}</td>
+                                <td>{{ schedule.group_name }}</td>
+                                <td>{{ schedule.subject }}</td>
+                                <td>{{ schedule.teacher }}</td>
+                                <td>{{ schedule.room }}</td>
+                                <td class="text-center">
+                                    <a href="{{ url_for('delete_schedule', id=schedule.id) }}" 
+                                       class="btn btn-danger btn-sm"
+                                       onclick="return confirm('Вы уверены, что хотите удалить это расписание?')">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="7" class="text-center text-muted py-4">
+                                    <i class="fas fa-calendar-xmark me-2"></i>Расписание не найдено
+                                </td>
+                            </tr>
+                        {% endif %}
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Добавляем стили -->
+<style>
+.card {
+    border: none;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+.card-header {
+    padding: 1rem;
+}
+
+.table th {
+    font-weight: 600;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.25rem rgba(13,110,253,.25);
+}
+
+.btn-sm {
+    padding: 0.25rem 0.5rem;
+}
+
+.badge {
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+}
+</style>
 {% endblock %}
