@@ -1,6 +1,6 @@
-*.db
+venv/
 __pycache__/
 *.pyc
+instance/
 .env
-venv/
-.idea/
+*.db
