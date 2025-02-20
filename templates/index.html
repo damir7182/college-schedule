@@ -3,13 +3,17 @@
 <head>
     <title>Расписание колледжа</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
     <div class="container">
-        <h1>Расписание колледжа</h1>
-        <div class="buttons">
-            <a href="{{ url_for('student') }}" class="button">Просмотр расписания</a>
-            <a href="{{ url_for('admin') }}" class="button">Вход для администратора</a>
+        <div class="card">
+            <h1>Расписание колледжа</h1>
+            <div class="buttons">
+                <a href="{{ url_for('student') }}" class="button">Просмотр расписания</a>
+                <a href="{{ url_for('admin') }}" class="button">Вход для администратора</a>
+            </div>
         </div>
     </div>
 </body>
