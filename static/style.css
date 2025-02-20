@@ -1,22 +1,106 @@
+/* Общие стили */
 body {
     background-color: #f8f9fa;
     min-height: 100vh;
 }
 
+/* Стили для карточек */
 .card {
     border: none;
     border-radius: 10px;
     box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
 }
 
 .card-header {
     border-radius: 10px 10px 0 0 !important;
+    padding: 15px 20px;
+}
+
+/* Стили для таблиц */
+.table {
+    margin-bottom: 0;
 }
 
 .table th {
     background-color: #f8f9fa;
+    border-top: none;
+    padding: 12px;
 }
 
+.table td {
+    padding: 12px;
+    vertical-align: middle;
+}
+
+/* Стили для форм */
+.form-select-lg {
+    font-size: 1.1rem;
+    padding: 0.8rem 1rem;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+/* Стили для кнопок */
+.btn-custom {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 5px;
+    transition: all 0.3s;
+}
+
+.btn-custom:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
+
+/* Стили для навигации */
+.navbar {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Стили для уведомлений */
+.alert {
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+    
+    .table {
+        font-size: 0.9rem;
+    }
+    
+    .table th, .table td {
+        padding: 8px;
+    }
+    
+    .card-body {
+        padding: 15px;
+    }
+}
+
+/* Стили для иконок */
+.fa-3x {
+    margin-bottom: 1rem;
+}
+
+/* Стили для заголовков */
+.display-4 {
+    font-weight: 600;
+    margin-bottom: 2rem;
+}
+
+/* Стили для группировки расписания */
 .day-schedule {
     margin-bottom: 30px;
 }
@@ -29,35 +113,19 @@ body {
     margin-bottom: 0;
 }
 
-.schedule-table {
-    background-color: white;
-    border-radius: 0 0 10px 10px;
+/* Анимации */
+.card {
+    transition: transform 0.3s ease;
 }
 
-.btn-custom {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 8px 20px;
-    border-radius: 5px;
-    transition: all 0.3s;
+.card:hover {
+    transform: translateY(-5px);
 }
 
-.btn-custom:hover {
-    background-color: #0056b3;
-    color: white;
+.btn {
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
     transform: translateY(-2px);
-}
-
-.group-select {
-    max-width: 300px;
-    margin: 0 auto 20px;
-}
-
-.navbar {
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.alert {
-    border-radius: 10px;
 }
