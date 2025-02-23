@@ -15,10 +15,12 @@
         <div class="collapse show" id="addScheduleForm">
             <div class="card-body">
                 <form method="POST" action="{{ url_for('add_schedule') }}" class="row g-3">
+                    {{ csrf_token() }}
+
                     <!-- День недели -->
                     <div class="col-md-4">
-                        <label class="form-label">День недели</label>
-                        <select name="day" class="form-select" required>
+                        <label for="day" class="form-label">День недели</label>
+                        <select id="day" name="day" class="form-select" required>
                             <option value="">Выберите день</option>
                             {% for day in ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'] %}
                             <option value="{{ day }}">{{ day }}</option>
@@ -28,37 +30,37 @@
                     
                     <!-- Время -->
                     <div class="col-md-4">
-                        <label class="form-label">Время</label>
-                        <input type="time" name="time" class="form-control" required>
+                        <label for="time" class="form-label">Время</label>
+                        <input type="time" id="time" name="time" class="form-control" required>
                     </div>
                     
                     <!-- Группа -->
                     <div class="col-md-4">
-                        <label class="form-label">Группа</label>
-                        <input type="text" name="group_name" class="form-control" list="groupList" required>
+                        <label for="group_name" class="form-label">Группа</label>
+                        <input type="text" id="group_name" name="group_name" class="form-control" list="groupList" required>
                         <datalist id="groupList">
                             {% for group in groups %}
-                            <option value="{{ group }}">
+                            <option value="{{ group }}"></option>
                             {% endfor %}
                         </datalist>
                     </div>
                     
                     <!-- Предмет -->
                     <div class="col-md-4">
-                        <label class="form-label">Предмет</label>
-                        <input type="text" name="subject" class="form-control" required>
+                        <label for="subject" class="form-label">Предмет</label>
+                        <input type="text" id="subject" name="subject" class="form-control" required>
                     </div>
                     
                     <!-- Преподаватель -->
                     <div class="col-md-4">
-                        <label class="form-label">Преподаватель</label>
-                        <input type="text" name="teacher" class="form-control" required>
+                        <label for="teacher" class="form-label">Преподаватель</label>
+                        <input type="text" id="teacher" name="teacher" class="form-control" required>
                     </div>
                     
                     <!-- Кабинет -->
                     <div class="col-md-4">
-                        <label class="form-label">Кабинет</label>
-                        <input type="text" name="room" class="form-control" required>
+                        <label for="room" class="form-label">Кабинет</label>
+                        <input type="text" id="room" name="room" class="form-control" required>
                     </div>
                     
                     <!-- Кнопка добавления -->
@@ -80,7 +82,7 @@
             </h5>
         </div>
         <div class="card-body">
-            <form method="GET" class="row g-3">
+            <form method="GET" action="" class="row g-3">
                 <!-- Фильтр по группе -->
                 <div class="col-md-5">
                     <select name="group" class="form-select">
@@ -97,7 +99,7 @@
                 <div class="col-md-5">
                     <select name="day" class="form-select">
                         <option value="">Все дни</option>
-                        {% for day in days %}
+                        {% for day in ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'] %}
                         <option value="{{ day }}" {% if selected_day == day %}selected{% endif %}>
                             {{ day }}
                         </option>
@@ -150,7 +152,7 @@
                                 <td class="text-center">
                                     <a href="{{ url_for('delete_schedule', id=schedule.id) }}" 
                                        class="btn btn-danger btn-sm"
-                                       onclick="return confirm('Вы уверены, что хотите удалить это расписание?')">
+                                       data-bs-toggle="tooltip" data-bs-placement="top" title="Удалить расписание">
                                         <i class="fas fa-trash"></i>
                                     </a>
                                 </td>
@@ -169,35 +171,4 @@
         </div>
     </div>
 </div>
-
-<!-- Добавляем стили -->
-<style>
-.card {
-    border: none;
-    box-shadow: 0 0 15px rgba(0,0,0,0.1);
-    margin-bottom: 20px;
-}
-
-.card-header {
-    padding: 1rem;
-}
-
-.table th {
-    font-weight: 600;
-}
-
-.form-control:focus, .form-select:focus {
-    border-color: #0d6efd;
-    box-shadow: 0 0 0 0.25rem rgba(13,110,253,.25);
-}
-
-.btn-sm {
-    padding: 0.25rem 0.5rem;
-}
-
-.badge {
-    font-size: 0.9rem;
-    padding: 0.5rem 1rem;
-}
-</style>
 {% endblock %}
