@@ -26,13 +26,15 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link {% if request.endpoint and 'student' in request.endpoint %}active{% endif %}" href="{{ url_for('student') }}">
+                        <a class="nav-link {% if request.endpoint and request.endpoint.startswith('student') %}active{% endif %}" 
+                           href="{{ url_for('student') }}">
                             <i class="fas fa-users me-1"></i>Студентам
                         </a>
                     </li>
                     {% if current_user.is_authenticated and current_user.is_admin %}
                     <li class="nav-item">
-                        <a class="nav-link {% if request.endpoint and 'schedule' in request.endpoint %}active{% endif %}" href="{{ url_for('schedule') }}">
+                        <a class="nav-link {% if request.endpoint and request.endpoint.startswith('schedule') %}active{% endif %}" 
+                           href="{{ url_for('schedule') }}">
                             <i class="fas fa-cog me-1"></i>Управление
                         </a>
                     </li>
@@ -58,15 +60,10 @@
     </nav>
 
     <!-- Основной контент -->
-    <div class="container mt-4">
-        {% with messages = get_flashed_messages(with_categories=true) %}
+    <div class="container py-3">
+        {% with messages = get_flashed_messages(with_categories=True) %}
         {% if messages %}
-            {% for flash in messages %}
-                {% if flash is iterable and flash is not string %}
-                    {% set category, message = flash %}
-                {% else %}
-                    {% set category, message = 'info', flash %}
-                {% endif %}
+            {% for category, message in messages %}
                 <div class="alert alert-{{ category if category != 'message' else 'info' }} alert-dismissible fade show" role="alert">
                     {{ message }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Закрыть"></button>
